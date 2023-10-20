@@ -8,6 +8,7 @@ public class StringCalculator {
         int result = 0;
         String prev="";
         String number = "";
+        String minusNumbers="";
 
         if(numbers.startsWith("//")){
             numbers=numbers.substring(2);
@@ -24,14 +25,22 @@ public class StringCalculator {
         for (int i = 0; i < numbers.length(); i++) {
             char charDigit = numbers.charAt(i);
 
-            if (!Character.isDigit(charDigit)) {
-
+            if (!Character.isDigit(charDigit)&&charDigit!='-') {
+                System.out.println(number);
                 if (prev.equals(",")) {
                     System.out.println("Invalid data");
                     return 0;
                 }
                 if (charDigit == ',') {
-                    result += Integer.parseInt(number.trim());
+                    int convertNumber=Integer.parseInt(number.trim());
+
+                    if(convertNumber<0){
+                        minusNumbers+=convertNumber+",";
+                        prev=""+convertNumber;
+                        number="";
+                        continue;
+                    }
+                    result += convertNumber;
                     prev = ",";
                     number = "";
                     continue;
@@ -40,7 +49,15 @@ public class StringCalculator {
             number += charDigit;
             prev=number;
         }
-        result += Integer.parseInt(number.trim());
+        int convertNumber=Integer.parseInt(number.trim());
+        if(convertNumber<0){
+            minusNumbers+=convertNumber+",";
+
+        }else{
+        result += convertNumber;}
+        if(minusNumbers!=""){
+            System.out.println("List of minus numbers :"+minusNumbers);
+        }
         return result;
     }
 }
