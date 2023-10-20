@@ -12,6 +12,7 @@ public class Main {
             if (numbers.equals("ex")) return;
             int result = new StringCalculator().add(numbers);
             System.out.println("Result: " + result);
+
         }
     }
 }

@@ -1,7 +1,12 @@
 package org.example;
+
+import java.awt.desktop.SystemEventListener;
 import java.util.List;
 import java.util.ArrayList;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.Comparator;
+import java.util.Collections;
 public class StringCalculator {
     int add(String numbers) {
         if (numbers == "") {
@@ -14,11 +19,11 @@ public class StringCalculator {
         List<String> delimeters = new ArrayList<String>();
         if (numbers.startsWith("//")) {
             numbers = numbers.substring(2);
-            if(numbers.startsWith("[]")){
+            if (numbers.startsWith("[]")) {
                 numbers = numbers.substring(4);
-                String delimeter="";
-                String buffer="";
-                for(int i=0;i<numbers.length();i++) {
+                String delimeter = "";
+
+                for (int i = 0; i < numbers.length(); i++) {
                     char charDigit = numbers.charAt(i);
                     if (Character.isDigit(charDigit) || charDigit == '-') {
                         continue;
@@ -28,24 +33,58 @@ public class StringCalculator {
                         break;
                     }
                 }
-                numbers=numbers.replaceAll("\\*+", ",");
+                numbers = numbers.replaceAll("\\*+", ",");
 
-            }else{
-            char delimeter = numbers.charAt(0);
-            numbers = numbers.substring(1);
-            numbers = numbers.replace(delimeter, ',');}
+            } else if (numbers.startsWith("[")) {
+                Pattern pattern = Pattern.compile("\\[(.*?)\\]");
+                Matcher matcher = pattern.matcher(numbers);
+                while (matcher.find()) {
+                    String value = matcher.group(1);
+                    delimeters.add(value);
+                }
+
+                Comparator<String> lengthComparator = new Comparator<String>() {
+                    @Override
+                    public int compare(String s1, String s2) {
+                        return Integer.compare(s1.length(), s2.length());
+                    }
+                };
+
+
+                Collections.sort(delimeters, lengthComparator);
+                Collections.reverse(delimeters);
+
+                for(int i=0;i<delimeters.size();i++){
+                    numbers=numbers.replace("["+delimeters.get(i)+"]","");
+                }
+                for(int i=0;i<delimeters.size();i++){
+                    numbers=numbers.replace(delimeters.get(i),",");
+
+                }
+
+
+            } else {
+                char delimeter = numbers.charAt(0);
+                numbers = numbers.substring(1);
+                numbers = numbers.replace(delimeter, ',');
+            }
+
         }
         numbers = numbers.trim();
         numbers = numbers.replace("\\n", ",");
         if (numbers.startsWith(",")) {
             numbers = numbers.substring(1);
         }
-        System.out.println(numbers);
+
+        if(numbers.endsWith(",")){
+            System.out.println("Invalid data");
+            return 0;
+        }
         for (int i = 0; i < numbers.length(); i++) {
             char charDigit = numbers.charAt(i);
 
             if (!Character.isDigit(charDigit) && charDigit != '-') {
-                System.out.println(number);
+
                 if (prev.equals(",")) {
                     System.out.println("Invalid data");
                     return 0;
