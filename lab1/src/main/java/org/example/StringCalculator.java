@@ -1,4 +1,6 @@
 package org.example;
+import java.util.List;
+import java.util.ArrayList;
 
 public class StringCalculator {
     int add(String numbers) {
@@ -9,19 +11,36 @@ public class StringCalculator {
         String prev = "";
         String number = "";
         String minusNumbers = "";
-
+        List<String> delimeters = new ArrayList<String>();
         if (numbers.startsWith("//")) {
             numbers = numbers.substring(2);
+            if(numbers.startsWith("[]")){
+                numbers = numbers.substring(4);
+                String delimeter="";
+                String buffer="";
+                for(int i=0;i<numbers.length();i++) {
+                    char charDigit = numbers.charAt(i);
+                    if (Character.isDigit(charDigit) || charDigit == '-') {
+                        continue;
+                    }
+                    if (delimeter.equals("")) {
+                        delimeter = "" + charDigit;
+                        break;
+                    }
+                }
+                numbers=numbers.replaceAll("\\*+", ",");
+
+            }else{
             char delimeter = numbers.charAt(0);
             numbers = numbers.substring(1);
-            numbers = numbers.replace(delimeter, ',');
+            numbers = numbers.replace(delimeter, ',');}
         }
         numbers = numbers.trim();
         numbers = numbers.replace("\\n", ",");
         if (numbers.startsWith(",")) {
             numbers = numbers.substring(1);
         }
-
+        System.out.println(numbers);
         for (int i = 0; i < numbers.length(); i++) {
             char charDigit = numbers.charAt(i);
 
