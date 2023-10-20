@@ -8,15 +8,26 @@ public class StringCalculator {
         int result = 0;
         String prev="";
         String number = "";
-        String delimeter = "";
-         numbers=numbers.replace("\\n",",");
+
+        if(numbers.startsWith("//")){
+            numbers=numbers.substring(2);
+            char delimeter=numbers.charAt(0);
+            numbers=numbers.substring(1);
+            numbers=numbers.replace(delimeter,',');
+        }
+       numbers= numbers.trim();
+        numbers=numbers.replace("\\n",",");
+        if(numbers.startsWith(",")) {
+            numbers = numbers.substring(1);
+        }
+
         for (int i = 0; i < numbers.length(); i++) {
             char charDigit = numbers.charAt(i);
 
             if (!Character.isDigit(charDigit)) {
-                System.out.print(delimeter);
-                if (prev.equals(",")) {
 
+                if (prev.equals(",")) {
+                    System.out.println("Invalid data");
                     return 0;
                 }
                 if (charDigit == ',') {
