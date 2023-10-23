@@ -74,7 +74,7 @@ public class Matrix {
             }
             return result;
         } else {
-            throw new IllegalArgumentException("Invalid column index.");
+            throw new IllegalArgumentException("Invalid column index!");
         }
     }
 
