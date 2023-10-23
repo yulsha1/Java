@@ -1,15 +1,20 @@
 package org.example;
+
 import java.util.Scanner;
 import java.util.Arrays;
+
 public class Matrix {
     private int[][] matrix;
-    public Matrix(){
-        matrix=new int[0][0];
+
+    public Matrix() {
+        matrix = new int[0][0];
     }
+
     public Matrix(int rows, int columns) {
         matrix = new int[rows][columns];
     }
-    public Matrix(Matrix matrixToCopy){
+
+    public Matrix(Matrix matrixToCopy) {
         int rows = matrixToCopy.getRows();
         int columns = matrixToCopy.getColumns();
         matrix = new int[rows][columns];
@@ -33,8 +38,9 @@ public class Matrix {
     public int[][] getMatrix() {
         return matrix;
     }
+
     public void fillFullMatrix() {
-        Scanner scanner=new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         int rows = getRows();
         int columns = getColumns();
 
@@ -53,6 +59,7 @@ public class Matrix {
             }
         }
     }
+
     public int getElement(int row, int column) {
         if (isValidIndex(row, column)) {
             return matrix[row][column];
@@ -60,6 +67,7 @@ public class Matrix {
             throw new IllegalArgumentException("Invalid row or column index.");
         }
     }
+
     public int[] getRow(int row) {
         if (isValidRowIndex(row)) {
             return matrix[row].clone();
@@ -67,6 +75,7 @@ public class Matrix {
             throw new IllegalArgumentException("Invalid row index.");
         }
     }
+
     public int[] getColumn(int column) {
         if (isValidColumnIndex(column)) {
             int[] result = new int[getRows()];
@@ -90,6 +99,7 @@ public class Matrix {
     private boolean isValidColumnIndex(int column) {
         return column >= 0 && column < getColumns();
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -102,6 +112,7 @@ public class Matrix {
     public int hashCode() {
         return Arrays.deepHashCode(matrix);
     }
+
     public Matrix add(Matrix otherMatrix) {
         int rows = getRows();
         int columns = getColumns();
@@ -138,6 +149,7 @@ public class Matrix {
 
         return resultMatrix;
     }
+
     public Matrix multiply(Matrix otherMatrix) {
         int rowsA = getRows();
         int columnsA = getColumns();
@@ -162,6 +174,22 @@ public class Matrix {
 
         return resultMatrix;
     }
+    public Matrix transpose() {
+        int rows = getRows();
+        int columns = getColumns();
+
+        Matrix transposedMatrix = new Matrix(columns, rows);
+        int[][] transposed = transposedMatrix.getMatrix();
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                transposed[j][i] = matrix[i][j];
+            }
+        }
+
+        return transposedMatrix;
+    }
+
 
 
 }
