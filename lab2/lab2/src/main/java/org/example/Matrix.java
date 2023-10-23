@@ -32,7 +32,7 @@ public class Matrix {
     public int[][] getMatrix() {
         return matrix;
     }
-    public void fillMatrixFromScanner() {
+    public void fillFullMatrix() {
         Scanner scanner=new Scanner(System.in);
         int rows = getRows();
         int columns = getColumns();
@@ -51,5 +51,42 @@ public class Matrix {
                 }
             }
         }
+    }
+    public int getElement(int row, int column) {
+        if (isValidIndex(row, column)) {
+            return matrix[row][column];
+        } else {
+            throw new IllegalArgumentException("Invalid row or column index.");
+        }
+    }
+    public int[] getRow(int row) {
+        if (isValidRowIndex(row)) {
+            return matrix[row].clone();
+        } else {
+            throw new IllegalArgumentException("Invalid row index.");
+        }
+    }
+    public int[] getColumn(int column) {
+        if (isValidColumnIndex(column)) {
+            int[] result = new int[getRows()];
+            for (int i = 0; i < getRows(); i++) {
+                result[i] = matrix[i][column];
+            }
+            return result;
+        } else {
+            throw new IllegalArgumentException("Invalid column index.");
+        }
+    }
+
+    private boolean isValidIndex(int row, int column) {
+        return isValidRowIndex(row) && isValidColumnIndex(column);
+    }
+
+    private boolean isValidRowIndex(int row) {
+        return row >= 0 && row < getRows();
+    }
+
+    private boolean isValidColumnIndex(int column) {
+        return column >= 0 && column < getColumns();
     }
 }
