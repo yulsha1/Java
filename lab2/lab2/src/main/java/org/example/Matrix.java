@@ -1,5 +1,6 @@
 package org.example;
 import java.util.Scanner;
+import java.util.Arrays;
 public class Matrix {
     private int[][] matrix;
     public Matrix(){
@@ -88,5 +89,17 @@ public class Matrix {
 
     private boolean isValidColumnIndex(int column) {
         return column >= 0 && column < getColumns();
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Matrix other = (Matrix) o;
+        return Arrays.deepEquals(matrix, other.matrix);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(matrix);
     }
 }
