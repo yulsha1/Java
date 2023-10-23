@@ -1,5 +1,5 @@
 package org.example;
-
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Arrays;
 
@@ -221,7 +221,24 @@ public class Matrix {
         return identityMatrix;
     }
 
+    public static Matrix createRandomRowMatrix(int length, int minRandomValue, int maxRandomValue) {
+        if (length <= 0) {
+            throw new IllegalArgumentException("Довжина матриці-строки повинна бути більшою за 0");
+        }
 
+        Matrix randomRowMatrix = new Matrix(1, length);
+        int[][] matrixData = randomRowMatrix.getMatrix();
+        Random random = new Random();
 
+        for (int j = 0; j < length; j++) {
+            int randomValue = random.nextInt(maxRandomValue - minRandomValue + 1) + minRandomValue;
+            matrixData[0][j] = randomValue;
+        }
+
+        return randomRowMatrix;
+    }
 
 }
+
+
+
