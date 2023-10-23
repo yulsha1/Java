@@ -138,5 +138,30 @@ public class Matrix {
 
         return resultMatrix;
     }
+    public Matrix multiply(Matrix otherMatrix) {
+        int rowsA = getRows();
+        int columnsA = getColumns();
+        int rowsB = otherMatrix.getRows();
+        int columnsB = otherMatrix.getColumns();
+
+        if (columnsA != rowsB) {
+            throw new IllegalArgumentException("The number of columns in the first matrix must be equal to the number of rows in the second matrix for matrix multiplication.");
+        }
+
+        Matrix resultMatrix = new Matrix(rowsA, columnsB);
+        int[][] result = resultMatrix.getMatrix();
+        int[][] other = otherMatrix.getMatrix();
+
+        for (int i = 0; i < rowsA; i++) {
+            for (int j = 0; j < columnsB; j++) {
+                for (int k = 0; k < columnsA; k++) {
+                    result[i][j] += matrix[i][k] * other[k][j];
+                }
+            }
+        }
+
+        return resultMatrix;
+    }
+
 
 }
