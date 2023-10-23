@@ -102,4 +102,41 @@ public class Matrix {
     public int hashCode() {
         return Arrays.deepHashCode(matrix);
     }
+    public Matrix add(Matrix otherMatrix) {
+        int rows = getRows();
+        int columns = getColumns();
+
+        if (rows != otherMatrix.getRows() || columns != otherMatrix.getColumns()) {
+            throw new IllegalArgumentException("Matrices must have the same dimensions for addition.");
+        }
+
+        Matrix resultMatrix = new Matrix(rows, columns);
+        int[][] result = resultMatrix.getMatrix();
+        int[][] other = otherMatrix.getMatrix();
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                result[i][j] = matrix[i][j] + other[i][j];
+            }
+        }
+
+        return resultMatrix;
+    }
+
+    public Matrix multiply(int scalar) {
+        int rows = getRows();
+        int columns = getColumns();
+
+        Matrix resultMatrix = new Matrix(rows, columns);
+        int[][] result = resultMatrix.getMatrix();
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                result[i][j] = matrix[i][j] * scalar;
+            }
+        }
+
+        return resultMatrix;
+    }
+
 }
