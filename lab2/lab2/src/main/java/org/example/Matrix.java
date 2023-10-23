@@ -199,13 +199,28 @@ public class Matrix {
                 if (i == j) {
                     matrixData[i][j] = diagonalValues[i];
                 } else {
-                    matrixData[i][j] = 0; 
+                    matrixData[i][j] = 0;
                 }
             }
         }
-
         return diagonalMatrix;
     }
+    public static Matrix createIdentityMatrix(int size) {
+        Matrix identityMatrix = new Matrix(size, size);
+        int[][] matrixData = identityMatrix.getMatrix();
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (i == j) {
+                    matrixData[i][j] = 1;
+                } else {
+                    matrixData[i][j] = 0;
+                }
+            }
+        }
+        return identityMatrix;
+    }
+
 
 
 
