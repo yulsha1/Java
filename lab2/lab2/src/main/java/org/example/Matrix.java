@@ -189,6 +189,23 @@ public class Matrix {
 
         return transposedMatrix;
     }
+    public static Matrix createDiagonalMatrix(int[] diagonalValues) {
+        int size = diagonalValues.length;
+        Matrix diagonalMatrix = new Matrix(size, size);
+        int[][] matrixData = diagonalMatrix.getMatrix();
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (i == j) {
+                    matrixData[i][j] = diagonalValues[i];
+                } else {
+                    matrixData[i][j] = 0; 
+                }
+            }
+        }
+
+        return diagonalMatrix;
+    }
 
 
 
