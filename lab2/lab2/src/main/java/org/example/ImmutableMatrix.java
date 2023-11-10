@@ -1,40 +1,20 @@
 package org.example;
-public final class ImmutableMatrix {
-    private final int[][] matrix;
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.linear.SingularMatrixException;
+import java.util.Arrays;
 
-    public ImmutableMatrix(Matrix matrix) {
-        if (matrix != null) {
-            int rowCount = matrix.getRows();
-            int columnCount = matrix.getColumns();
-            this.matrix = new int[rowCount][columnCount];
-            for (int i = 0; i < rowCount; i++) {
-                for (int j = 0; j < columnCount; j++) {
-                    this.matrix[i][j] = matrix.getElement(i, j);
-                }
-            }
-        } else {
-            this.matrix = null;
-        }
+public final class ImmutableMatrix extends Matrix {
+
+    public ImmutableMatrix() {
+        super();
     }
 
-    public int getElement(int row, int column) {
-        if (matrix == null || row < 0 || row >= matrix.length || column < 0 || column >= matrix[0].length) {
-            throw new IllegalArgumentException("Invalid matrix dimensions or indices");
-        }
-        return matrix[row][column];
+    public ImmutableMatrix(int rows, int columns) {
+        super(rows, columns);
     }
 
-    public int getRowCount() {
-        if (matrix == null) {
-            return 0;
-        }
-        return matrix.length;
-    }
-
-    public int getColumnCount() {
-        if (matrix == null || matrix.length == 0) {
-            return 0;
-        }
-        return matrix[0].length;
+    public ImmutableMatrix(Matrix matrixToCopy) {
+        super(matrixToCopy);
     }
 }

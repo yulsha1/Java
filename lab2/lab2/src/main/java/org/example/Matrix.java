@@ -1,4 +1,7 @@
 package org.example;
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.linear.SingularMatrixException;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Arrays;
@@ -26,7 +29,9 @@ public class Matrix {
             }
         }
     }
-
+    public Matrix(int[][] matrix){
+        this.matrix=matrix;
+    }
     public int getRows() {
         return matrix.length;
     }
@@ -112,7 +117,18 @@ public class Matrix {
     public int hashCode() {
         return Arrays.deepHashCode(matrix);
     }
+    public void fillRandomMatrix(int minRandomValue, int maxRandomValue) {
+        int rows = getRows();
+        int columns = getColumns();
+        Random random = new Random();
 
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                int randomValue = random.nextInt(maxRandomValue - minRandomValue + 1) + minRandomValue;
+                matrix[i][j] = randomValue;
+            }
+        }
+    }
     public Matrix add(Matrix otherMatrix) {
         int rows = getRows();
         int columns = getColumns();
@@ -174,6 +190,54 @@ public class Matrix {
 
         return resultMatrix;
     }
+    public Matrix inverse() {
+        int rows = getRows();
+        int columns = getColumns();
+
+        if (rows != columns) {
+            throw new IllegalArgumentException("Матриця повинна бути квадратною для знаходження оберненої матриці.");
+        }
+
+        RealMatrix realMatrix = MatrixUtils.createRealMatrix(convertToIntToDouble(matrix));
+
+        try {
+            RealMatrix inverse = MatrixUtils.inverse(realMatrix);
+            return new Matrix(new Matrix(convertDoubleToInt(inverse.getData())));
+        } catch (SingularMatrixException e) {
+            throw new IllegalArgumentException("Матриця є сингулярною і не має оберненої матриці.");
+        }
+    }
+
+    public double[][] convertToIntToDouble(int[][] intMatrix) {
+        int rows = intMatrix.length;
+        int columns = intMatrix[0].length;
+
+        double[][] doubleMatrix = new double[rows][columns];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                doubleMatrix[i][j] = (double) intMatrix[i][j];
+
+            }
+        }
+
+        return doubleMatrix;
+    }
+    public  int[][] convertDoubleToInt(double[][] doubleMatrix) {
+        int rows = doubleMatrix.length;
+        int columns = doubleMatrix[0].length;
+
+        int[][] intMatrix = new int[rows][columns];
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                intMatrix[i][j] = (int) Math.round(doubleMatrix[i][j]);
+               // System.out.println(doubleMatrix[i][j]);
+            }
+        }
+
+        return intMatrix;
+    }
     public Matrix transpose() {
         int rows = getRows();
         int columns = getColumns();
@@ -189,6 +253,8 @@ public class Matrix {
 
         return transposedMatrix;
     }
+
+
     public static Matrix createDiagonalMatrix(int[] diagonalValues) {
         int size = diagonalValues.length;
         Matrix diagonalMatrix = new Matrix(size, size);
@@ -205,6 +271,7 @@ public class Matrix {
         }
         return diagonalMatrix;
     }
+
     public static Matrix createIdentityMatrix(int size) {
         Matrix identityMatrix = new Matrix(size, size);
         int[][] matrixData = identityMatrix.getMatrix();
@@ -237,6 +304,35 @@ public class Matrix {
 
         return randomRowMatrix;
     }
+
+    public static Matrix createRandomColumnMatrix(int length, int minRandomValue, int maxRandomValue) {
+        if (length <= 0) {
+            throw new IllegalArgumentException("Довжина матриці-стовпчика повинна бути більшою за 0");
+        }
+
+        Matrix randomColumnMatrix = new Matrix(length, 1);
+        int[][] matrixData = randomColumnMatrix.getMatrix();
+        Random random = new Random();
+
+        for (int i = 0; i < length; i++) {
+            int randomValue = random.nextInt(maxRandomValue - minRandomValue + 1) + minRandomValue;
+            matrixData[i][0] = randomValue;
+        }
+
+        return randomColumnMatrix;
+    }
+    public void printMatrix() {
+        int rows = getRows();
+        int columns = getColumns();
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                System.out.printf("%5d", matrix[i][j]);
+            }
+            System.out.println();
+        }
+    }
+
 
 }
 
