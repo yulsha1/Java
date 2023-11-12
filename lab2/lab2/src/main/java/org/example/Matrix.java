@@ -6,7 +6,7 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Arrays;
 
-public class Matrix {
+public class Matrix implements IMatrix {
     private int[][] matrix;
 
     public Matrix() {
@@ -17,7 +17,7 @@ public class Matrix {
         matrix = new int[rows][columns];
     }
 
-    public Matrix(Matrix matrixToCopy) {
+    public Matrix(IMatrix matrixToCopy) {
         int rows = matrixToCopy.getRows();
         int columns = matrixToCopy.getColumns();
         matrix = new int[rows][columns];
@@ -129,7 +129,7 @@ public class Matrix {
             }
         }
     }
-    public Matrix add(Matrix otherMatrix) {
+    public ImmutableMatrix add(IMatrix otherMatrix) {
         int rows = getRows();
         int columns = getColumns();
 
@@ -137,7 +137,7 @@ public class Matrix {
             throw new IllegalArgumentException("Matrices must have the same dimensions for addition.");
         }
 
-        Matrix resultMatrix = new Matrix(rows, columns);
+        ImmutableMatrix resultMatrix = new ImmutableMatrix(rows, columns);
         int[][] result = resultMatrix.getMatrix();
         int[][] other = otherMatrix.getMatrix();
 
@@ -150,11 +150,11 @@ public class Matrix {
         return resultMatrix;
     }
 
-    public Matrix multiply(int scalar) {
+    public ImmutableMatrix multiply(int scalar) {
         int rows = getRows();
         int columns = getColumns();
 
-        Matrix resultMatrix = new Matrix(rows, columns);
+        ImmutableMatrix resultMatrix = new ImmutableMatrix(rows, columns);
         int[][] result = resultMatrix.getMatrix();
 
         for (int i = 0; i < rows; i++) {
@@ -166,7 +166,7 @@ public class Matrix {
         return resultMatrix;
     }
 
-    public Matrix multiply(Matrix otherMatrix) {
+    public ImmutableMatrix multiply(IMatrix otherMatrix) {
         int rowsA = getRows();
         int columnsA = getColumns();
         int rowsB = otherMatrix.getRows();
@@ -176,7 +176,7 @@ public class Matrix {
             throw new IllegalArgumentException("The number of columns in the first matrix must be equal to the number of rows in the second matrix for matrix multiplication.");
         }
 
-        Matrix resultMatrix = new Matrix(rowsA, columnsB);
+        ImmutableMatrix resultMatrix = new ImmutableMatrix(rowsA, columnsB);
         int[][] result = resultMatrix.getMatrix();
         int[][] other = otherMatrix.getMatrix();
 
@@ -190,23 +190,50 @@ public class Matrix {
 
         return resultMatrix;
     }
-    public Matrix inverse() {
-        int rows = getRows();
-        int columns = getColumns();
+    public ImmutableMatrix inverse() {
+        int size = getRows();
 
-        if (rows != columns) {
-            throw new IllegalArgumentException("Матриця повинна бути квадратною для знаходження оберненої матриці.");
+        if (size != getColumns()) {
+            throw new IllegalArgumentException("Matrix must be square to find its inverse.");
         }
 
-        RealMatrix realMatrix = MatrixUtils.createRealMatrix(convertToIntToDouble(matrix));
-
-        try {
-            RealMatrix inverse = MatrixUtils.inverse(realMatrix);
-            return new Matrix(new Matrix(convertDoubleToInt(inverse.getData())));
-        } catch (SingularMatrixException e) {
-            throw new IllegalArgumentException("Матриця є сингулярною і не має оберненої матриці.");
+        double[][] augmentedMatrix = new double[size][2 * size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                augmentedMatrix[i][j] = matrix[i][j];
+                augmentedMatrix[i][size + j] = (i == j) ? 1.0 : 0.0;
+            }
         }
+
+        for (int i = 0; i < size; i++) {
+            double pivot = augmentedMatrix[i][i];
+
+            for (int j = 0; j < 2 * size; j++) {
+                augmentedMatrix[i][j] /= pivot;
+            }
+
+            for (int k = 0; k < size; k++) {
+                if (k != i) {
+                    double factor = augmentedMatrix[k][i];
+                    for (int j = 0; j < 2 * size; j++) {
+                        augmentedMatrix[k][j] -= factor * augmentedMatrix[i][j];
+                    }
+                }
+            }
+        }
+
+        int[][] inverseMatrix = new int[size][size];
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                inverseMatrix[i][j] = (int) Math.round(augmentedMatrix[i][size + j]);
+                //System.out.print(augmentedMatrix[i][size + j]+" ");
+            }
+           // System.out.println();
+        }
+
+        return new ImmutableMatrix(inverseMatrix);
     }
+
 
     public double[][] convertToIntToDouble(int[][] intMatrix) {
         int rows = intMatrix.length;
@@ -232,17 +259,17 @@ public class Matrix {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 intMatrix[i][j] = (int) Math.round(doubleMatrix[i][j]);
-               // System.out.println(doubleMatrix[i][j]);
+                //System.out.println(doubleMatrix[i][j]);
             }
         }
 
         return intMatrix;
     }
-    public Matrix transpose() {
+    public ImmutableMatrix transpose() {
         int rows = getRows();
         int columns = getColumns();
 
-        Matrix transposedMatrix = new Matrix(columns, rows);
+        ImmutableMatrix transposedMatrix = new ImmutableMatrix(columns, rows);
         int[][] transposed = transposedMatrix.getMatrix();
 
         for (int i = 0; i < rows; i++) {
@@ -252,6 +279,9 @@ public class Matrix {
         }
 
         return transposedMatrix;
+    }
+    public void GetColumnsAndRows(){
+        System.out.println("Rows: "+this.getRows()+"; Columns: "+this.getColumns());
     }
 
 
