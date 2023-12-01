@@ -7,26 +7,44 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        Matrix matrix = new Matrix(3,4);
-        matrix.fillRandomMatrix(1, 10);
+//        int[][] myArray = {
+//                {1, 6, 3},
+//                {4, 5, 6},
+//                {7, 8, 9}
+//        };
+//
+//        Matrix myMatrix = new Matrix(myArray);
+//        myMatrix.printMatrix();
+//        System.out.println();
+
+
+        Matrix matrix = new Matrix(2,2);
+        matrix.fillRandomMatrix(0, 10);
         matrix.printMatrix();
         System.out.println();
 
 
-        ImmutableMatrix immutableMatrix = new ImmutableMatrix(3, 4);
-        immutableMatrix.fillRandomMatrix(1, 10);
-        immutableMatrix.printMatrix();
-        System.out.println();
+//        ImmutableMatrix matrix1 = new ImmutableMatrix(matrix);
+//        matrix1.printMatrix();
+//        System.out.println();
+//
+//        ImmutableMatrix matrix2 = matrix1.add(matrix);
+//        matrix2.printMatrix();
+//        System.out.println();
+//
+//        matrix2.fillRandomMatrix(1, 10);
+//        matrix2.printMatrix();
+//
+//        System.out.println(matrix.equals(matrix1));
 
-        ImmutableMatrix matrix1 =  matrix.add(immutableMatrix);
-        Matrix matrix2=matrix1.add(matrix);
-        matrix2.printMatrix();
-        System.out.println( );
+        ImmutableMatrix matrix5  = matrix.inverse();
+        matrix5.printMatrix();
 
 
-
-
-
+//        ImmutableMatrix immutableMatrix = new ImmutableMatrix(3, 4);
+//        immutableMatrix.fillRandomMatrix(1, 10);
+//        immutableMatrix.printMatrix();
+//        System.out.println();
 
 
 
@@ -114,7 +132,7 @@ public class Main {
 
 
 //        Множення матриць
-//        ImmutableMatrix immutableMatrix = new ImmutableMatrix(3, 3);
+//        ImmutableMatrix immutableMatrix = new ImmutableMatrix(4, 3);
 //        immutableMatrix.fillRandomMatrix(1, 10);
 //        immutableMatrix.printMatrix();
 //        System.out.println();

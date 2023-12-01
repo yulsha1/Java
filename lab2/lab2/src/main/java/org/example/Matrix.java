@@ -1,7 +1,4 @@
 package org.example;
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.RealMatrix;
-import org.apache.commons.math3.linear.SingularMatrixException;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Arrays;
@@ -190,6 +187,7 @@ public class Matrix implements IMatrix {
 
         return resultMatrix;
     }
+
     public ImmutableMatrix inverse() {
         int size = getRows();
 
@@ -203,6 +201,33 @@ public class Matrix implements IMatrix {
                 augmentedMatrix[i][j] = matrix[i][j];
                 augmentedMatrix[i][size + j] = (i == j) ? 1.0 : 0.0;
             }
+        }
+
+        double determinant = 1.0;
+        for (int i = 0; i < size; i++) {
+            double pivot = augmentedMatrix[i][i];
+            determinant *= pivot;
+
+            if (pivot == 0.0) {
+                throw new IllegalArgumentException("Matrix is singular and cannot be inverted.");
+            }
+
+            for (int j = 0; j < 2 * size; j++) {
+                augmentedMatrix[i][j] /= pivot;
+            }
+
+            for (int k = 0; k < size; k++) {
+                if (k != i) {
+                    double factor = augmentedMatrix[k][i];
+                    for (int j = 0; j < 2 * size; j++) {
+                        augmentedMatrix[k][j] -= factor * augmentedMatrix[i][j];
+                    }
+                }
+            }
+        }
+
+        if (Math.abs(determinant) < 1e-9) {
+            throw new IllegalArgumentException("Matrix is singular and cannot be inverted.");
         }
 
         for (int i = 0; i < size; i++) {
@@ -226,9 +251,9 @@ public class Matrix implements IMatrix {
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
                 inverseMatrix[i][j] = (int) Math.round(augmentedMatrix[i][size + j]);
-                //System.out.print(augmentedMatrix[i][size + j]+" ");
+//                System.out.print(augmentedMatrix[i][size + j]+" ");
             }
-           // System.out.println();
+//            System.out.println();
         }
 
         return new ImmutableMatrix(inverseMatrix);
@@ -280,9 +305,10 @@ public class Matrix implements IMatrix {
 
         return transposedMatrix;
     }
-    public void GetColumnsAndRows(){
-        System.out.println("Rows: "+this.getRows()+"; Columns: "+this.getColumns());
-    }
+//    public boolean GetColumnsAndRows(){
+//        System.out.println("Rows: "+this.getRows()+"; Columns: "+this.getColumns());
+//        return false;
+//    }
 
 
     public static Matrix createDiagonalMatrix(int[] diagonalValues) {
